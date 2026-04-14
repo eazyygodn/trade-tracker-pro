@@ -404,6 +404,35 @@ footer p{font-size:12px;color:var(--t3)}
   </div>
 </section>
 
+
+<!-- PRICING -->
+<section style="padding:80px 40px;max-width:900px;margin:0 auto;text-align:center">
+  <div class="section-label">Pricing</div>
+  <div class="section-title">Simple, honest pricing</div>
+  <p class="section-sub" style="margin:0 auto 48px">Start free. Upgrade when you're ready.</p>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;max-width:700px;margin:0 auto">
+    <!-- Free -->
+    <div style="background:var(--s1);border:1px solid var(--b1);border-radius:14px;padding:28px;text-align:left">
+      <div style="font-size:13px;color:var(--t3);font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px">Free</div>
+      <div style="font-size:36px;font-weight:800;font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-1px;margin-bottom:4px">$0</div>
+      <div style="font-size:13px;color:var(--t2);margin-bottom:24px">forever</div>
+      ${['20 trades lifetime','All analytics','AI trading coach','MT4/MT5 sync','Import from other apps'].map(f=>`<div style="display:flex;gap:8px;margin-bottom:8px;font-size:13px;color:var(--t2)"><span style="color:var(--green)">✓</span>${f}</div>`).join('')}
+      <a href="https://eazyygodn.github.io/trade-tracker-dashboard" style="display:block;margin-top:20px;text-align:center;border:1px solid var(--b2);border-radius:8px;padding:10px;font-size:13px;font-weight:600;color:var(--t1);text-decoration:none">Get started free</a>
+    </div>
+
+    <!-- Pro -->
+    <div style="background:var(--s1);border:2px solid var(--ac-bdr);border-radius:14px;padding:28px;text-align:left;position:relative;overflow:hidden">
+      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--ac),#4488ff)"></div>
+      <div style="font-size:13px;color:var(--ac);font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px">Pro</div>
+      <div style="font-size:36px;font-weight:800;font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-1px;margin-bottom:4px;color:var(--t1)">$14.99<span style="font-size:15px;color:var(--t2);font-weight:400">/mo</span></div>
+      <div style="font-size:13px;color:var(--t2);margin-bottom:24px">paid in crypto · cancel anytime</div>
+      ${['Unlimited trades','Everything in Free','Priority support','Future features included','Session analysis'].map(f=>`<div style="display:flex;gap:8px;margin-bottom:8px;font-size:13px;color:var(--t1)"><span style="color:var(--green)">✓</span>${f}</div>`).join('')}
+      <a href="https://eazyygodn.github.io/trade-tracker-dashboard" style="display:block;margin-top:20px;text-align:center;background:var(--ac);border-radius:8px;padding:11px;font-size:13px;font-weight:700;color:#050510;text-decoration:none;box-shadow:0 4px 20px rgba(0,212,170,.25)">Upgrade to Pro →</a>
+    </div>
+  </div>
+</section>
+
 <section class="cta-section">
   <h2>Start tracking your edge<br><span style="color:var(--ac)">today.</span></h2>
   <p>Free forever. No credit card required. 5 minute setup.<br><span style='font-size:14px;color:var(--t3)'>Works on Windows 10 & 11 with MT4 and MT5.</span></p>
