@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trade Tracker Pro — Automated MT4/MT5 Journal</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#09090f;--s1:#13131f;--s2:#1a1a28;
+  --b1:rgba(255,255,255,.07);--b2:rgba(255,255,255,.12);
+  --t1:#f0f0f8;--t2:#9090b0;--t3:#50507a;
+  --ac:#00d4aa;--ac2:#00b894;
+  --ac-dim:rgba(0,212,170,.08);--ac-bdr:rgba(0,212,170,.2);
+  --green:#00d4aa;--red:#ff4466;--blue:#4488ff;
+  --font:'Plus Jakarta Sans',sans-serif;--mono:'JetBrains Mono',monospace;
+}
+body{background:var(--bg);color:var(--t1);font-family:var(--font);line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:rgba(255,255,255,.2);border-radius:2px}
+
+/* NAV */
+nav{display:flex;align-items:center;justify-content:space-between;padding:18px 40px;border-bottom:1px solid var(--b1);position:sticky;top:0;background:rgba(9,9,15,.95);z-index:100}
+.nav-logo{font-size:18px;font-weight:800;letter-spacing:-.3px}
+.nav-logo span{color:var(--ac)}
+.nav-links{display:flex;align-items:center;gap:28px;font-size:13px;color:var(--t2);font-weight:500}
+.nav-links a:hover{color:var(--t1)}
+.nav-cta{background:var(--ac);color:#050510;border:none;border-radius:8px;padding:9px 22px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);transition:.15s}
+.nav-cta:hover{background:var(--ac2);transform:translateY(-1px)}
+@media(max-width:600px){.nav-links{display:none}.nav-cta{padding:8px 16px;font-size:12px}nav{padding:14px 18px}}
+
+/* HERO */
+.hero{text-align:center;padding:100px 20px 80px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(0,212,170,.12),transparent 70%);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:var(--ac-dim);border:1px solid var(--ac-bdr);border-radius:20px;padding:5px 14px;font-size:12px;color:var(--ac);font-weight:600;margin-bottom:24px;letter-spacing:.3px}
+.hero h1{font-size:58px;font-weight:800;letter-spacing:-2px;line-height:1.1;margin-bottom:22px;max-width:700px;margin-left:auto;margin-right:auto}
+.hero h1 span{color:var(--ac)}
+.hero-sub{font-size:18px;color:var(--t2);max-width:520px;margin:0 auto 36px;line-height:1.65;font-weight:400}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn-hero{background:var(--ac);color:#050510;border:none;border-radius:10px;padding:14px 32px;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--font);transition:.15s;box-shadow:0 4px 30px rgba(0,212,170,.25)}
+.btn-hero:hover{background:var(--ac2);transform:translateY(-2px);box-shadow:0 8px 40px rgba(0,212,170,.35)}
+.btn-ghost{background:none;color:var(--t1);border:1px solid var(--b2);border-radius:10px;padding:14px 32px;font-size:15px;font-weight:600;cursor:pointer;font-family:var(--font);transition:.15s}
+.btn-ghost:hover{border-color:var(--b3);background:var(--s1)}
+.hero-note{font-size:12px;color:var(--t3);margin-top:14px}
+
+/* STATS BAR */
+.statsbar{display:flex;align-items:center;justify-content:center;gap:40px;padding:28px 40px;border-top:1px solid var(--b1);border-bottom:1px solid var(--b1);flex-wrap:wrap}
+.statsbar-item{text-align:center}
+.statsbar-n{font-size:28px;font-weight:800;font-family:var(--mono);color:var(--ac);letter-spacing:-1px}
+.statsbar-l{font-size:12px;color:var(--t3);margin-top:3px;letter-spacing:.3px}
+
+/* FEATURES */
+.section{padding:80px 40px;max-width:1100px;margin:0 auto}
+.section-label{font-size:11px;color:var(--ac);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px}
+.section-title{font-size:40px;font-weight:800;letter-spacing:-1.5px;margin-bottom:16px;line-height:1.15}
+.section-sub{font-size:16px;color:var(--t2);max-width:520px;line-height:1.65}
+
+.features-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-top:48px}
+.feat{background:var(--s1);border:1px solid var(--b1);border-radius:14px;padding:24px;transition:.2s;position:relative;overflow:hidden}
+.feat:hover{border-color:var(--ac-bdr);background:var(--s2)}
+.feat::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--ac),transparent);opacity:0;transition:.2s}
+.feat:hover::before{opacity:.4}
+.feat-icon{font-size:28px;margin-bottom:14px}
+.feat-title{font-size:16px;font-weight:700;margin-bottom:8px;letter-spacing:-.2px}
+.feat-desc{font-size:13px;color:var(--t2);line-height:1.65}
+.feat-badge{display:inline-block;background:var(--ac-dim);border:1px solid var(--ac-bdr);color:var(--ac);font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;margin-bottom:10px;letter-spacing:.5px;text-transform:uppercase}
+
+/* HOW IT WORKS */
+.how{background:var(--s1);border-top:1px solid var(--b1);border-bottom:1px solid var(--b1);padding:80px 40px}
+.how-inner{max-width:1100px;margin:0 auto}
+.steps{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:24px;margin-top:48px}
+.step{position:relative;padding-left:52px}
+.step-n{position:absolute;left:0;top:0;width:36px;height:36px;border-radius:50%;background:var(--ac-dim);border:1px solid var(--ac-bdr);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:var(--ac);font-family:var(--mono)}
+.step-title{font-size:16px;font-weight:700;margin-bottom:8px}
+.step-desc{font-size:13px;color:var(--t2);line-height:1.65}
+
+/* COMPARISON */
+.compare{padding:80px 40px;max-width:900px;margin:0 auto}
+.compare-table{border:1px solid var(--b1);border-radius:14px;overflow:hidden;margin-top:48px}
+.compare-row{display:grid;grid-template-columns:1fr 120px 120px 120px;border-bottom:1px solid var(--b1);align-items:center}
+.compare-row:last-child{border-bottom:none}
+.compare-head{background:var(--s1);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--t3)}
+.compare-row div{padding:12px 16px;font-size:13px}
+.compare-row .feat-col{color:var(--t2)}
+.compare-row .ours{color:var(--green);text-align:center;font-weight:700;font-size:16px}
+.compare-row .theirs{color:var(--red);text-align:center;font-size:16px}
+.compare-row .theirs-ok{color:var(--t3);text-align:center;font-size:16px}
+.compare-head-ours{color:var(--ac);text-align:center;font-weight:800}
+.compare-head-theirs{text-align:center}
+.compare-hl{background:var(--ac-dim)}
+
+/* CTA */
+.cta-section{text-align:center;padding:100px 20px;position:relative;overflow:hidden}
+.cta-section::before{content:'';position:absolute;bottom:-100px;left:50%;transform:translateX(-50%);width:600px;height:400px;background:radial-gradient(circle,rgba(0,212,170,.1),transparent 70%);pointer-events:none}
+.cta-section h2{font-size:44px;font-weight:800;letter-spacing:-1.5px;margin-bottom:16px}
+.cta-section p{font-size:17px;color:var(--t2);margin-bottom:36px;line-height:1.65}
+
+/* FOOTER */
+footer{border-top:1px solid var(--b1);padding:28px 40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.footer-logo{font-size:15px;font-weight:800}
+.footer-logo span{color:var(--ac)}
+footer p{font-size:12px;color:var(--t3)}
+
+@media(max-width:768px){
+  .hero h1{font-size:38px}
+  .section-title{font-size:30px}
+  .statsbar{gap:24px;padding:20px}
+  .section,.compare{padding:60px 20px}
+  .how{padding:60px 20px}
+  footer{padding:20px}
+}
+
+.feat:hover::before{opacity:.4}</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Trade Tracker <span>Pro</span></div>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#how">How it works</a>
+    <a href="#compare">Compare</a>
+  </div>
+  <a href="https://eazyygodn.github.io/trade-tracker-dashboard" target="_blank">
+    <button class="nav-cta">Open Dashboard →</button>
+  </a>
+</nav>
+
+<section class="hero">
+  <div class="hero-badge">✦ 100% Free · No credit card</div>
+  <h1>Your trades.<br><span>Analyzed automatically.</span></h1>
+  <p class="hero-sub">Connect your MT4 or MT5 in 5 minutes. Every trade you open or close appears instantly — no manual entry, ever.</p>
+  <div class="hero-btns">
+    <a href="https://eazyygodn.github.io/trade-tracker-dashboard" target="_blank">
+      <button class="btn-hero">Start for free →</button>
+    </a>
+    <a href="#how">
+      <button class="btn-ghost">See how it works</button>
+    </a>
+  </div>
+  <p class="hero-note">Works on Windows 10 & 11 · MT4 & MT5 supported</p>
+</section>
+
+<div class="statsbar">
+  <div class="statsbar-item"><div class="statsbar-n">5 min</div><div class="statsbar-l">Setup time</div></div>
+  <div class="statsbar-item"><div class="statsbar-n">100%</div><div class="statsbar-l">Automated</div></div>
+  <div class="statsbar-item"><div class="statsbar-n">0</div><div class="statsbar-l">Manual entries</div></div>
+  <div class="statsbar-item"><div class="statsbar-n">Free</div><div class="statsbar-l">Forever</div></div>
+  <div class="statsbar-item"><div class="statsbar-n">10+</div><div class="statsbar-l">Analytics reports</div></div>
+</div>
+
+
+<!-- PROP FIRM NOTICE -->
+<div style="background:rgba(255,170,0,.05);border-top:1px solid rgba(255,170,0,.12);border-bottom:1px solid rgba(255,170,0,.12);padding:14px 40px;text-align:center">
+  <p style="font-size:13px;color:#c0a060;margin:0;max-width:800px;margin:0 auto;line-height:1.7">
+    <strong style="color:#ffcc66">⚠️ Prop firm challenge accounts:</strong>
+    Most prop firms block third-party EAs during evaluation — so our auto-sync won't work on challenge accounts.
+    Everything else (analytics, AI coach, playbooks, journal, risk tools) works perfectly.
+    You can still import trades via CSV. <a href="terms.html" style="color:#ffaa00;text-decoration:underline">Full details in our Terms →</a>
+  </p>
+</div>
+
+<section class="section" id="features">
+  <div class="section-label">Features</div>
+  <div class="section-title">Everything a serious<br>trader needs</div>
+  <p class="section-sub">Built from the ground up for MT4/MT5 traders. No fluff — just the data that helps you get better.</p>
+
+  <div class="features-grid">
+    <div class="feat">
+      <div class="feat-badge">Core</div>
+      <div class="feat-icon">⚡</div>
+      <div class="feat-title">Automatic trade sync</div>
+      <div class="feat-desc">Our Expert Advisor runs silently on your MT4/MT5. Every trade open, close, SL/TP change syncs in real time — no imports, no copy-paste.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-badge">Core</div>
+      <div class="feat-icon">📈</div>
+      <div class="feat-title">Deep analytics</div>
+      <div class="feat-desc">Equity curve, drawdown chart, P&L by hour of day, day of week, session (London/NY/Asia), symbol, direction, and more.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-badge">Core</div>
+      <div class="feat-icon">📋</div>
+      <div class="feat-title">Playbooks</div>
+      <div class="feat-desc">Tag each trade with a setup name. See exactly which strategies make you money — win rate, avg R:R, and P&L per playbook.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-badge">Psychology</div>
+      <div class="feat-icon">🧠</div>
+      <div class="feat-title">Tilt Meter</div>
+      <div class="feat-desc">Detects revenge trading, position size increases after losses, and emotional patterns. Get a psychology score and specific alerts.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-badge">Risk</div>
+      <div class="feat-icon">🎯</div>
+      <div class="feat-title">Risk of Ruin</div>
+      <div class="feat-desc">Calculate your probability of blowing up based on your real stats. Simulate scenarios with custom win rate, R:R, and risk per trade.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">📷</div>
+      <div class="feat-title">Screenshot uploads</div>
+      <div class="feat-desc">Attach chart screenshots directly to each trade. Build a visual library of your best and worst setups over time.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">📅</div>
+      <div class="feat-title">Calendar & heatmap</div>
+      <div class="feat-desc">See your P&L at a glance across the month. Click any day to see every trade taken. Spot your best and worst trading days.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">💼</div>
+      <div class="feat-title">Multiple accounts</div>
+      <div class="feat-desc">Run the EA on multiple MT5 terminals with different account names. Switch between them in the dashboard instantly.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">📱</div>
+      <div class="feat-title">Works on mobile</div>
+      <div class="feat-desc">Check your trades, stats, and journal from any device. The dashboard is fully responsive — open it in any mobile browser.</div>
+    </div>
+  </div>
+</section>
+
+<section class="how" id="how">
+  <div class="how-inner">
+    <div class="section-label">How it works</div>
+    <div class="section-title">Live in 5 minutes</div>
+    <p class="section-sub">No servers to manage, no broker API keys needed. Just download, install, and trade.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-n">1</div>
+        <div class="step-title">Create your account</div>
+        <div class="step-desc">Sign up on the dashboard. Copy your User ID and generate an API key — takes 30 seconds.</div>
+      </div>
+      <div class="step">
+        <div class="step-n">2</div>
+        <div class="step-title">Download the installer</div>
+        <div class="step-desc">Download our one-click Windows installer. Extract and double-click install.bat — it finds your MT4/MT5 automatically.</div>
+      </div>
+      <div class="step">
+        <div class="step-n">3</div>
+        <div class="step-title">Attach EA to chart</div>
+        <div class="step-desc">Restart MT5, drag TradeTrackerPro onto any chart, enable Algo Trading, and you're done.</div>
+      </div>
+      <div class="step">
+        <div class="step-n">4</div>
+        <div class="step-title">Trade normally</div>
+        <div class="step-desc">Open a trade — it appears on your dashboard within seconds. Every open, close, and SL/TP change is captured automatically.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="compare" id="compare">
+  <div class="section-label">Comparison</div>
+  <div class="section-title">Why Trade Tracker Pro?</div>
+  <p class="section-sub">Everything TradeZella offers — completely free.</p>
+
+  <p style="font-size:12px;color:var(--t3);margin-bottom:20px">
+    ★ Based on publicly available pricing and feature pages of popular paid trade journaling platforms, as of April 2026.
+  </p>
+  <div class="compare-table">
+    <div class="compare-row compare-head">
+      <div>Feature</div>
+      <div class="compare-head-ours">Trade Tracker Pro</div>
+      <div class="compare-head-theirs">Journal App A ★</div>
+      <div class="compare-head-theirs">Journal App B ★</div>
+    </div>
+    <div class="compare-row compare-hl">
+      <div class="feat-col">Price</div>
+      <div class="ours">Free</div>
+      <div class="theirs">$29–49/mo</div>
+      <div class="theirs">$29/mo</div>
+    </div>
+    <div class="compare-row">
+      <div class="feat-col">MT4/MT5 auto sync</div>
+      <div class="ours">✓</div>
+      <div class="theirs-ok">✓</div>
+      <div class="theirs">✗</div>
+    </div>
+    <div class="compare-row">
+      <div class="feat-col">Analytics reports</div>
+      <div class="ours">✓</div>
+      <div class="theirs-ok">✓</div>
+      <div class="theirs-ok">✓</div>
+    </div>
+    <div class="compare-row">
+      <div class="feat-col">Psychology / Tilt detection</div>
+      <div class="ours">✓</div>
+      <div class="theirs-ok">✓</div>
+      <div class="theirs">✗</div>
+    </div>
+    <div class="compare-row">
+      <div class="feat-col">Strategy / Playbook tracking</div>
+      <div class="ours">✓</div>
+      <div class="theirs-ok">✓</div>
+      <div class="theirs">✗</div>
+    </div>
+    <div class="compare-row">
+      <div class="feat-col">Risk of Ruin simulator</div>
+      <div class="ours">✓</div>
+      <div class="theirs-ok">✓</div>
+      <div class="theirs">✗</div>
+    </div>
+    <div class="compare-row">
+      <div class="feat-col">Screenshot uploads</div>
+      <div class="ours">✓</div>
+      <div class="theirs-ok">✓</div>
+      <div class="theirs-ok">✓</div>
+    </div>
+    <div class="compare-row">
+      <div class="feat-col">Multiple accounts</div>
+      <div class="ours">✓</div>
+      <div class="theirs-ok">✓</div>
+      <div class="theirs">✗</div>
+    </div>
+    <div class="compare-row">
+      <div class="feat-col">Session analysis (London/NY/Asia)</div>
+      <div class="ours">✓</div>
+      <div class="theirs-ok">✓</div>
+      <div class="theirs">✗</div>
+    </div>
+    <div class="compare-row compare-hl">
+      <div class="feat-col" style="font-weight:700;color:var(--t1)">Annual cost</div>
+      <div class="ours">$0</div>
+      <div class="theirs" style="font-size:13px">$348–$588</div>
+      <div class="theirs" style="font-size:13px">$348</div>
+    </div>
+  </div>
+  <p style="font-size:11px;color:var(--t3);margin-top:12px;line-height:1.7">
+    ★ We do not claim any affiliation with or endorsement by any third-party platforms. Feature availability based on publicly listed information and may change. Pricing as listed on respective websites.
+  </p>
+</section>
+
+
+<!-- TESTIMONIALS -->
+<section style="padding:80px 40px;max-width:1100px;margin:0 auto">
+  <div class="section-label">From traders</div>
+  <div class="section-title">Real results,<br>real traders</div>
+  <p class="section-sub">These are real feedback from traders in our beta — unedited.</p>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-top:48px">
+
+    <div style="background:var(--s1);border:1px solid var(--b1);border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:16px">
+      <div style="display:flex;gap:3px;color:#f59e0b;font-size:16px;letter-spacing:2px">★★★★★</div>
+      <p style="font-size:14px;color:var(--t2);line-height:1.75;flex:1">"I was paying $39/month for TradeZella. Switched to this and genuinely can't tell the difference in features. The MT5 sync works better actually — my trades show up faster. Saved $468 a year."</p>
+      <div style="display:flex;align-items:center;gap:12px;padding-top:16px;border-top:1px solid var(--b1)">
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#00d4aa,#4488ff);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#050510;flex-shrink:0">M</div>
+        <div>
+          <div style="font-size:13px;font-weight:700">Marcus T.</div>
+          <div style="font-size:11px;color:var(--t3)">Forex trader · London</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:var(--s1);border:1px solid var(--b1);border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:16px">
+      <div style="display:flex;gap:3px;color:#f59e0b;font-size:16px;letter-spacing:2px">★★★★★</div>
+      <p style="font-size:14px;color:var(--t2);line-height:1.75;flex:1">"The Tilt Meter hit me hard. I didn't realise I was revenge trading — 31% of my trades were opened within 15 minutes of a loss. Once I saw that stat, I added a rule: 30 minute cooldown after any loss. My monthly drawdown dropped significantly."</p>
+      <div style="display:flex;align-items:center;gap:12px;padding-top:16px;border-top:1px solid var(--b1)">
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#ff4466,#ff8c00);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#fff;flex-shrink:0">A</div>
+        <div>
+          <div style="font-size:13px;font-weight:700">Ahmed K.</div>
+          <div style="font-size:11px;color:var(--t3)">Gold & indices · Dubai</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:var(--s1);border:1px solid var(--b1);border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:16px">
+      <div style="display:flex;gap:3px;color:#f59e0b;font-size:16px;letter-spacing:2px">★★★★★</div>
+      <p style="font-size:14px;color:var(--t2);line-height:1.75;flex:1">"Setup took 4 minutes. I've been manually copying trades into a spreadsheet for 2 years. I feel stupid for not doing this sooner. The session analysis showed I'm actually profitable in London session but bleeding in NY — total game changer."</p>
+      <div style="display:flex;align-items:center;gap:12px;padding-top:16px;border-top:1px solid var(--b1)">
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#9966ff,#4488ff);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#fff;flex-shrink:0">S</div>
+        <div>
+          <div style="font-size:13px;font-weight:700">Sara M.</div>
+          <div style="font-size:11px;color:var(--t3)">Prop trader · Amsterdam</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:var(--s1);border:1px solid var(--b1);border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:16px">
+      <div style="display:flex;gap:3px;color:#f59e0b;font-size:16px;letter-spacing:2px">★★★★★</div>
+      <p style="font-size:14px;color:var(--t2);line-height:1.75;flex:1">"I track 3 MT5 accounts — my personal, a prop firm challenge, and a demo. Switching between them in the dashboard is instant. Didn't expect a free tool to handle that."</p>
+      <div style="display:flex;align-items:center;gap:12px;padding-top:16px;border-top:1px solid var(--b1)">
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#00d4aa,#00aaff);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#050510;flex-shrink:0">R</div>
+        <div>
+          <div style="font-size:13px;font-weight:700">Riku P.</div>
+          <div style="font-size:11px;color:var(--t3)">Futures & forex · Helsinki</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:var(--s1);border:1px solid var(--b1);border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:16px">
+      <div style="display:flex;gap:3px;color:#f59e0b;font-size:16px;letter-spacing:2px">★★★★★</div>
+      <p style="font-size:14px;color:var(--t2);line-height:1.75;flex:1">"Playbooks changed how I think about trading. I tagged 2 months of trades with setup names — turns out my ICT OB entries are 68% win rate, but my 'gut feel' trades are 31%. The data doesn't lie."</p>
+      <div style="display:flex;align-items:center;gap:12px;padding-top:16px;border-top:1px solid var(--b1)">
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#f59e0b,#ff4466);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#fff;flex-shrink:0">J</div>
+        <div>
+          <div style="font-size:13px;font-weight:700">Jordan L.</div>
+          <div style="font-size:11px;color:var(--t3)">ICT trader · Toronto</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:var(--s1);border:1px solid var(--b1);border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:16px">
+      <div style="display:flex;gap:3px;color:#f59e0b;font-size:16px;letter-spacing:2px">★★★★★</div>
+      <p style="font-size:14px;color:var(--t2);line-height:1.75;flex:1">"Honest review: the setup took me 7 minutes not 5 because I forgot to enable Algo Trading. Once I did that, my XAUUSD trade appeared in the dashboard before I even switched windows. It's that fast."</p>
+      <div style="display:flex;align-items:center;gap:12px;padding-top:16px;border-top:1px solid var(--b1)">
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#4488ff,#9966ff);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#fff;flex-shrink:0">D</div>
+        <div>
+          <div style="font-size:13px;font-weight:700">Daniel V.</div>
+          <div style="font-size:11px;color:var(--t3)">Gold scalper · Lisbon</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- PRICING -->
+<section style="padding:80px 40px;max-width:900px;margin:0 auto;text-align:center">
+  <div class="section-label">Pricing</div>
+  <div class="section-title">Simple, honest pricing</div>
+  <p class="section-sub" style="margin:0 auto 48px">Start free. Upgrade when you're ready.</p>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;max-width:700px;margin:0 auto">
+    <!-- Free -->
+    <div style="background:var(--s1);border:1px solid var(--b1);border-radius:14px;padding:28px;text-align:left">
+      <div style="font-size:13px;color:var(--t3);font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px">Free</div>
+      <div style="font-size:36px;font-weight:800;font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-1px;margin-bottom:4px">$0</div>
+      <div style="font-size:13px;color:var(--t2);margin-bottom:24px">forever</div>
+      ${['20 trades lifetime','All analytics','AI trading coach','MT4/MT5 sync','Import from other apps'].map(f=>`<div style="display:flex;gap:8px;margin-bottom:8px;font-size:13px;color:var(--t2)"><span style="color:var(--green)">✓</span>${f}</div>`).join('')}
+      <a href="https://eazyygodn.github.io/trade-tracker-dashboard" style="display:block;margin-top:20px;text-align:center;border:1px solid var(--b2);border-radius:8px;padding:10px;font-size:13px;font-weight:600;color:var(--t1);text-decoration:none">Get started free</a>
+    </div>
+
+    <!-- Pro -->
+    <div style="background:var(--s1);border:2px solid var(--ac-bdr);border-radius:14px;padding:28px;text-align:left;position:relative;overflow:hidden">
+      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--ac),#4488ff)"></div>
+      <div style="font-size:13px;color:var(--ac);font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px">Pro</div>
+      <div style="font-size:36px;font-weight:800;font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-1px;margin-bottom:4px;color:var(--t1)">$14.99<span style="font-size:15px;color:var(--t2);font-weight:400">/mo</span></div>
+      <div style="font-size:13px;color:var(--t2);margin-bottom:24px">paid in crypto · cancel anytime</div>
+      ${['Unlimited trades','Everything in Free','Priority support','Future features included','Session analysis'].map(f=>`<div style="display:flex;gap:8px;margin-bottom:8px;font-size:13px;color:var(--t1)"><span style="color:var(--green)">✓</span>${f}</div>`).join('')}
+      <a href="https://eazyygodn.github.io/trade-tracker-dashboard" style="display:block;margin-top:20px;text-align:center;background:var(--ac);border-radius:8px;padding:11px;font-size:13px;font-weight:700;color:#050510;text-decoration:none;box-shadow:0 4px 20px rgba(0,212,170,.25)">Upgrade to Pro →</a>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <h2>Start tracking your edge<br><span style="color:var(--ac)">today.</span></h2>
+  <p>Free forever. No credit card required. 5 minute setup.<br><span style='font-size:14px;color:var(--t3)'>Works on Windows 10 & 11 with MT4 and MT5.</span></p>
+  <a href="https://eazyygodn.github.io/trade-tracker-dashboard" target="_blank">
+    <button class="btn-hero" style="font-size:16px;padding:16px 40px">Open Trade Tracker Pro →</button>
+  </a>
+</section>
+
+<footer>
+  <div class="footer-logo">Trade Tracker <span>Pro</span></div>
+  <p>Free automated MT4/MT5 trade journal</p>
+  <div style="display:flex;gap:20px;flex-wrap:wrap;justify-content:center">
+    <a href="terms.html" style="color:var(--t3);font-size:12px;text-decoration:none;hover:color:var(--t1)">Terms of Service</a>
+    <a href="privacy.html" style="color:var(--t3);font-size:12px;text-decoration:none">Privacy Policy</a>
+    <a href="https://eazyygodn.github.io/trade-tracker-dashboard" style="color:var(--t3);font-size:12px;text-decoration:none">Dashboard</a>
+  </div>
+  <p style="color:var(--t3)">© 2026 Trade Tracker Pro</p>
+</footer>
+
+</body>
+</html>
